@@ -18,8 +18,6 @@ typedef enum rb_color_e
 
 /**
  * struct rb_tree_s - Red-Black tree node structure
-
-
  * @n: Integer stored in the node
  * @parent: Pointer to the parent node
  * @left: Pointer to the left child node
