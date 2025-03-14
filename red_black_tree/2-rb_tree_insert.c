@@ -1,5 +1,7 @@
 #include "rb_trees.h"
 #include <stdlib.h>
+void rb_rotate_left(rb_tree_t **tree, rb_tree_t *node);
+void rb_rotate_right(rb_tree_t **tree, rb_tree_t *node);
 
 /**
  * rb_tree_node - Creates a new node in a Red-Black Tree
