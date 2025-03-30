@@ -11,7 +11,8 @@
  * @depth: Depth of the vertex
  * Return: 1 on success, 0 on failure
  */
-int enqueue(queue_node_t **head, queue_node_t **tail, const vertex_t *vertex, size_t depth)
+int enqueue(queue_node_t **head, queue_node_t **tail,
+	const vertex_t *vertex, size_t depth)
 {
 	queue_node_t *new_node = malloc(sizeof(queue_node_t));
 
