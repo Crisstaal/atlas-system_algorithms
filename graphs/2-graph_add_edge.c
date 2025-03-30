@@ -1,4 +1,5 @@
 #include "graphs.h"
+#include <stdlib.h>
 
 /**
  * graph_add_edge - Adds an edge between two vertices in the graph
