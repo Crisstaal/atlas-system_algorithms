@@ -4,19 +4,6 @@
 #include "graphs.h"
 
 /**
- * queue_node_s - Structure for a queue node
- * @vertex: Pointer to the graph vertex
- * @depth: Depth of the vertex in traversal
- * @next: Pointer to the next queue node
- */
-typedef struct queue_node_s
-{
-	const vertex_t *vertex;
-	size_t depth;
-	struct queue_node_s *next;
-} queue_node_t;
-
-/**
  * enqueue - Adds a vertex to the queue
  * @head: Pointer to the queue head
  * @tail: Pointer to the queue tail

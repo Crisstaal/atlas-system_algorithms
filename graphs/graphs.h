@@ -65,6 +65,20 @@ typedef struct graph_s
 	vertex_t *vertices;
 } graph_t;
 
+/**
+ * queue_node_s - Structure for a queue node
+ * @vertex: Pointer to the graph vertex
+ * @depth: Depth of the vertex in traversal
+ * @next: Pointer to the next queue node
+ */
+typedef struct queue_node_s
+{
+	const vertex_t *vertex;
+	size_t depth;
+	struct queue_node_s *next;
+} queue_node_t;
+
+
 #define UNIDIRECTIONAL 0
 #define BIDIRECTIONAL 1
 
