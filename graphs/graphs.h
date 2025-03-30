@@ -65,19 +65,15 @@ typedef struct graph_s
 	vertex_t *vertices;
 } graph_t;
 
-/* Traversal functions */
-size_t depth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *, size_t));
-size_t breadth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *, size_t));
+#define UNIDIRECTIONAL 0
+#define BIDIRECTIONAL 1
 
 /* Graph functions */
 graph_t *graph_create(void);
-void graph_display(const graph_t *graph);
-void graph_delete(graph_t *graph);
 vertex_t *graph_add_vertex(graph_t *graph, const char *content);
-int graph_add_edge(graph_t *graph, const char *src, const char *dest, edge_type_t type)
-
-/* Edge type */
-#define UNIDIRECTIONAL 0
-#define BIDIRECTIONAL 1
+int graph_add_edge(graph_t *graph, const char *src, const char *dest, edge_type_t type);
+void graph_delete(graph_t *graph);
+size_t depth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *v, size_t depth));
+size_t breadth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *v, size_t depth));
 
 #endif
