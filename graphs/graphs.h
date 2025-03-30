@@ -69,7 +69,6 @@ typedef struct graph_s
 graph_t *graph_create(void);
 void graph_delete(graph_t *graph);
 vertex_t *graph_add_vertex(graph_t *graph, const char *content);
-int graph_add_edge(graph_t *graph, const char *src, const char *dest, int type);
 void graph_display(const graph_t *graph);
 
 /* Traversal functions */
