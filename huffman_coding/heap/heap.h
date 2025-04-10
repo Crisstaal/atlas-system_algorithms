@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 
+
 /**
  * struct binary_tree_node_s - Binary tree node data structure
  *
@@ -32,6 +33,12 @@ typedef struct heap_s
 	int (*data_cmp)(void *, void *);
 	binary_tree_node_t *root;
 } heap_t;
+/**
+ * swap_data - Swaps the data pointers of two nodes
+ * @a: First node
+ * @b: Second node
+ */
+
 
 void heap_delete(heap_t *heap, void (*free_data)(void *));
 void *heap_extract(heap_t *heap);
