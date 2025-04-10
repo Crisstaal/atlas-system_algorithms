@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new_node);
-static void heapify_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *));
-static void swap_data(binary_tree_node_t *a, binary_tree_node_t *b);
-
 /**
  * heap_insert - Inserts a new node into the heap
  * @heap: Pointer to the heap structure
