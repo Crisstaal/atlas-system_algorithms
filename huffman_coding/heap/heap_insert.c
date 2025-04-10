@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* Function declarations */
+
 static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new_node);
 static void heapify_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *));
 static void swap_data(binary_tree_node_t *a, binary_tree_node_t *b);
