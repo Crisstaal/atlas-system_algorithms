@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* Function declarations */
+static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new_node);
+static void heapify_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *));
+static void swap_data(binary_tree_node_t *a, binary_tree_node_t *b);
+
 /**
  * heap_insert - Inserts a new node into the heap
  * @heap: Pointer to the heap structure
@@ -11,32 +16,32 @@
  */
 binary_tree_node_t *heap_insert(heap_t *heap, void *data)
 {
-    binary_tree_node_t *new_node = NULL;
+	binary_tree_node_t *new_node = NULL;
 
-    if (heap == NULL || data == NULL)
-        return (NULL);
+	if (heap == NULL || data == NULL)
+		return (NULL);
 
-    /* Create the new node */
-    new_node = binary_tree_node(NULL, data);
-    if (new_node == NULL)
-        return (NULL);
+	/* Create the new node */
+	new_node = binary_tree_node(NULL, data);
+	if (new_node == NULL)
+		return (NULL);
 
-    /* If the heap is empty, the new node becomes the root */
-    if (heap->root == NULL)
-    {
-        heap->root = new_node;
-        heap->size++;
-        return (new_node);
-    }
+	/* If the heap is empty, the new node becomes the root */
+	if (heap->root == NULL)
+	{
+		heap->root = new_node;
+		heap->size++;
+		return (new_node);
+	}
 
-    /* Insert the new node in the leftmost available spot */
-    insert_level_order(heap->root, new_node);
+	/* Insert the new node in the leftmost available spot */
+	insert_level_order(heap->root, new_node);
 
-    /* Heapify-up to restore the heap property */
-    heapify_up(new_node, heap->data_cmp);
+	/* Heapify-up to restore the heap property */
+	heapify_up(new_node, heap->data_cmp);
 
-    heap->size++;
-    return (new_node);
+	heap->size++;
+	return (new_node);
 }
 
 /**
@@ -46,37 +51,37 @@ binary_tree_node_t *heap_insert(heap_t *heap, void *data)
  */
 static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new_node)
 {
-    binary_tree_node_t *queue[1024]; /* Queue for level-order traversal */
-    int front = 0, rear = 0;
-    binary_tree_node_t *current = NULL;
+	binary_tree_node_t *queue[1024]; /* Queue for level-order traversal */
+	int front = 0, rear = 0;
+	binary_tree_node_t *current = NULL;
 
-    /* Begin level-order traversal */
-    queue[rear++] = root;
+	/* Begin level-order traversal */
+	queue[rear++] = root;
 
-    while (front < rear)
-    {
-        current = queue[front++];
+	while (front < rear)
+	{
+		current = queue[front++];
 
-        /* Check if left child is available */
-        if (current->left == NULL)
-        {
-            current->left = new_node;
-            new_node->parent = current;
-            return;
-        }
-        else
-            queue[rear++] = current->left;
+		/* Check if left child is available */
+		if (current->left == NULL)
+		{
+			current->left = new_node;
+			new_node->parent = current;
+			return;
+		}
+		else
+			queue[rear++] = current->left;
 
-        /* Check if right child is available */
-        if (current->right == NULL)
-        {
-            current->right = new_node;
-            new_node->parent = current;
-            return;
-        }
-        else
-            queue[rear++] = current->right;
-    }
+		/* Check if right child is available */
+		if (current->right == NULL)
+		{
+			current->right = new_node;
+			new_node->parent = current;
+			return;
+		}
+		else
+			queue[rear++] = current->right;
+	}
 }
 
 /**
@@ -86,21 +91,21 @@ static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new
  */
 static void heapify_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *))
 {
-    binary_tree_node_t *parent = NULL;
+	binary_tree_node_t *parent = NULL;
 
-    while (node && node->parent)
-    {
-        parent = node->parent;
+	while (node && node->parent)
+	{
+		parent = node->parent;
 
-        /* Compare node's data with its parent's data */
-        if (data_cmp(node->data, parent->data) < 0) /* Min-heap condition */
-        {
-            swap_data(node, parent);
-            node = parent;
-        }
-        else
-            break;
-    }
+		/* Compare node's data with its parent's data */
+		if (data_cmp(node->data, parent->data) < 0) /* Min-heap condition */
+		{
+			swap_data(node, parent);
+			node = parent;
+		}
+		else
+			break;
+	}
 }
 
 /**
@@ -110,9 +115,9 @@ static void heapify_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *)
  */
 static void swap_data(binary_tree_node_t *a, binary_tree_node_t *b)
 {
-    void *tmp;
+	void *tmp;
 
-    tmp = a->data;
-    a->data = b->data;
-    b->data = tmp;
+	tmp = a->data;
+	a->data = b->data;
+	b->data = tmp;
 }
