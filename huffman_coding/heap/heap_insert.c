@@ -51,7 +51,8 @@ binary_tree_node_t *heap_insert(heap_t *heap, void *data)
  * @root: The root of the heap
  * @new_node: The node to insert
  */
-static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new_node)
+static void insert_level_order(binary_tree_node_t *root,
+	binary_tree_node_t *new_node)
 {
 	binary_tree_node_t *queue[1024]; /* Queue for level-order traversal */
 	int front = 0, rear = 0;
@@ -91,7 +92,8 @@ static void insert_level_order(binary_tree_node_t *root, binary_tree_node_t *new
  * @node: The newly inserted node
  * @data_cmp: The comparison function used to compare node data
  */
-static void heapify_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *))
+static void heapify_up(binary_tree_node_t *node,
+	int (*data_cmp)(void *, void *))
 {
 	binary_tree_node_t *parent = NULL;
 
