@@ -29,12 +29,12 @@ void sift_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *))
 	}
 }
 
-//**
+/**
 * get_insertion_parent - Finds the parent where the new node should be inserted
 * @root: Pointer to the root node
 *
 * Return: Pointer to the parent node where insertion should happen
-*/
+**/
 binary_tree_node_t *get_insertion_parent(binary_tree_node_t *root)
 {
    binary_tree_node_t *queue[1024];
