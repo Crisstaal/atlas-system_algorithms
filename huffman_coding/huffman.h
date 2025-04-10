@@ -9,8 +9,8 @@
  */
 typedef struct symbol_s
 {
-    char data;
-    size_t freq;
+	char data;
+	size_t freq;
 } symbol_t;
 
 int huffman_codes(char *data, size_t *freq, size_t size);
