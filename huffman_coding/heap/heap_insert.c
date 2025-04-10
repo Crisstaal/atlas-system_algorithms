@@ -32,32 +32,31 @@ void sift_up(binary_tree_node_t *node, int (*data_cmp)(void *, void *))
 /**
  * get_insertion_parent - Finds the parent where the new node should be inserted
  * @root: Pointer to the root node
- * @size: Current size of the heap
  *
  * Return: Pointer to the parent node where insertion should happen
  */
-binary_tree_node_t *get_insertion_parent(binary_tree_node_t *root, size_t size)
+binary_tree_node_t *get_insertion_parent(binary_tree_node_t *root)
 {
-	binary_tree_node_t *queue[1024];
-	size_t front = 0, back = 0;
+    binary_tree_node_t *queue[1024];
+    size_t front = 0, back = 0;
 
-	if (root == NULL)
-		return (NULL);
+    if (root == NULL)
+        return (NULL);
 
-	queue[back++] = root;
+    queue[back++] = root;
 
-	while (front < back)
-	{
-		binary_tree_node_t *node = queue[front++];
+    while (front < back)
+    {
+        binary_tree_node_t *node = queue[front++];
 
-		if (node->left == NULL || node->right == NULL)
-			return (node);
+        if (node->left == NULL || node->right == NULL)
+            return (node);
 
-		queue[back++] = node->left;
-		queue[back++] = node->right;
-	}
+        queue[back++] = node->left;
+        queue[back++] = node->right;
+    }
 
-	return (NULL);
+    return (NULL);
 }
 
 /**
