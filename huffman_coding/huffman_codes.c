@@ -1,5 +1,4 @@
 #include "huffman.h"
-#include "binary_tree.h"
 #include <stdlib.h>
 #include <stdio.h>
 
