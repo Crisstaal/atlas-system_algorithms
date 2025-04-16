@@ -78,7 +78,68 @@ static int backtrack(char **map, int **visited, queue_t *path,
 				return (0);
 			pt->x = current->x;
 			pt->y = current->y;
-			enqueue(path, pt);
+			#include "queues.h"  // Ensure you have the correct header
+
+/**
+ * backtrack - Recursive backtracking function
+ * @map: 2D map array
+ * @visited: 2D visited array
+ * @path: Queue to store the path
+ * @current: Current point
+ * @target: Target point
+ * @rows: number of rows
+ * @cols: number of columns
+ * Return: 1 if path found, 0 otherwise
+ */
+static int backtrack(char **map, int **visited, queue_t *path,
+		     point_t *current, point_t const *target,
+		     int rows, int cols)
+{
+	point_t *pt;
+
+	printf("Checking coordinates [%d, %d]\n", current->x, current->y);
+
+	if (!is_valid(map, visited, current->x, current->y, rows, cols))
+		return (0);
+
+	visited[current->y][current->x] = 1;
+
+	if (current->x == target->x && current->y == target->y)
+	{
+		pt = malloc(sizeof(*pt));
+		if (!pt)
+			return (0);
+		pt->x = current->x;
+		pt->y = current->y;
+		queue_push_back(path, pt);  // Use queue_push_back instead of enqueue
+		return (1);
+	}
+
+	point_t dirs[] = {
+		{current->x + 1, current->y}, /* Right */
+		{current->x, current->y + 1}, /* Down */
+		{current->x - 1, current->y}, /* Left */
+		{current->x, current->y - 1}  /* Up */
+	};
+	int i;
+
+	for (i = 0; i < 4; i++)
+	{
+		if (backtrack(map, visited, path, &dirs[i], target, rows, cols))
+		{
+			pt = malloc(sizeof(*pt));
+			if (!pt)
+				return (0);
+			pt->x = current->x;
+			pt->y = current->y;
+			queue_push_back(path, pt);  // Use queue_push_back instead of enqueue
+			return (1);
+		}
+	}
+
+	return (0);
+}
+(path, pt);
 			return (1);
 		}
 	}
