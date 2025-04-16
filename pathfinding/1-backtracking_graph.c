@@ -30,7 +30,7 @@ static int backtrack(vertex_t const *vertex, vertex_t const *target,
     printf("Checking %s\n", vertex->content);
 
     visited[count] = (char *)vertex->content;
-    enqueue(path, strdup(vertex->content));
+    queue_push_back(path, strdup(vertex->content));
 
     if (vertex == target)
         return (1);
