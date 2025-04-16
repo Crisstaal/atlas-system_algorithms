@@ -55,10 +55,11 @@ static int backtrack(char **map, int **visited, queue_t *path,
             return (0);
         pt->x = current->x;
         pt->y = current->y;
-        queue_push_back(path, pt);
+        queue_push_front(path, pt);
         return (1);
     }
 
+    // Directions (right, down, left, up)
     point_t dirs[] = {
         {current->x + 1, current->y}, /* Right */
         {current->x, current->y + 1}, /* Down */
@@ -76,7 +77,7 @@ static int backtrack(char **map, int **visited, queue_t *path,
                 return (0);
             pt->x = current->x;
             pt->y = current->y;
-            queue_push_back(path, pt);
+            queue_push_front(path, pt);
             return (1);
         }
     }
