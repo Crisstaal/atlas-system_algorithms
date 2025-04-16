@@ -1,5 +1,6 @@
 #include "pathfinding.h"
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
@@ -27,7 +28,7 @@ typedef struct dijkstra_node_s
  * Return: Pointer to the found dijkstra_node_t, or NULL
  */
 static dijkstra_node_t *get_node_by_vertex(dijkstra_node_t *nodes,
-                                           const vertex_t *vertex, size_t size)
+					   const vertex_t *vertex, size_t size)
 {
 	for (size_t i = 0; i < size; i++)
 		if (nodes[i].vertex == vertex)
@@ -63,7 +64,7 @@ static dijkstra_node_t *get_closest_unvisited(dijkstra_node_t *nodes, size_t siz
  * Return: Queue with the path, or NULL on failure
  */
 static queue_t *build_path(dijkstra_node_t *nodes, size_t size,
-                           const vertex_t *start, const vertex_t *target)
+			   const vertex_t *start, const vertex_t *target)
 {
 	queue_t *path = queue_create();
 	dijkstra_node_t *node = get_node_by_vertex(nodes, target, size);
@@ -96,7 +97,7 @@ static queue_t *build_path(dijkstra_node_t *nodes, size_t size,
  * Return: Queue with shortest path or NULL
  */
 queue_t *dijkstra_graph(graph_t *graph, const vertex_t *start,
-                        const vertex_t *target)
+			const vertex_t *target)
 {
 	vertex_t *v;
 	dijkstra_node_t *nodes;
