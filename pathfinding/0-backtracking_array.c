@@ -3,6 +3,8 @@
 #include <string.h>
 #include "pathfinding.h"
 #include "queues.h"
+#include "graphs.h"
+
 
 
 /**
