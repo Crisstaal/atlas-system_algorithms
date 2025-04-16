@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pathfinding.h"
+#include "queue.h"
+
 
 /**
  * is_valid - Checks if a cell is within bounds and walkable
