@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pathfinding.h"
-#include "queue.h"
+#include "queues.h"
 
 
 /**
