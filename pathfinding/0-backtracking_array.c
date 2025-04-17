@@ -72,21 +72,6 @@ static int backtrack(char **map, int rows, int cols, int x, int y,
  *
  * Return: A queue containing the path from start to target, or NULL if no path
  */
-queue_t *reverse_queue(queue_t *queue)
-{
-    queue_t *reversed = queue_create();
-    if (!reversed)
-        return NULL;
-
-    // Pop elements from the original queue and push them to the reversed queue
-    while (!queue_is_empty(queue))
-    {
-        point_t *point = queue_pop_front(queue);
-        queue_push_back(reversed, point);
-    }
-
-    return reversed;
-}
 queue_t *backtracking_array(char **map, int rows, int cols,
                             point_t const *start, point_t const *target)
 {
