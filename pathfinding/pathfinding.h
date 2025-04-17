@@ -22,5 +22,7 @@ queue_t *backtracking_graph(graph_t *graph,
 			    vertex_t const *start, vertex_t const *target);
 queue_t *dijkstra_graph(graph_t *graph,
 			vertex_t const *start, vertex_t const *target);
+int queue_is_empty(queue_t *queue);
+point_t *queue_pop_front(queue_t *queue);
 
 #endif /* PATHFINDING_H */
