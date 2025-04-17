@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "pathfinding.h"
-#include "queue.h"
+#include "queues.h"
 
 /**
  * is_valid_move - Check if the current position is valid to move
