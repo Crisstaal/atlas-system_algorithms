@@ -46,7 +46,7 @@ static int backtrack(char **map, int rows, int cols, int x, int y,
     /** Try moving in the specified order: right, down, left, up */
     if (backtrack(map, rows, cols, y + 1, x, target, visited, path) ||   // Right
         backtrack(map, rows, cols, y, x + 1, target, visited, path) ||   // Bottom
-        backtrack(map, rows, cols, y - 1, ,x target, visited, path) ||   // Left
+        backtrack(map, rows, cols, y - 1, x, target, visited, path) ||   // Left
         backtrack(map, rows, cols, y, x - 1, target, visited, path))     // Top
     {
         point_t *point = malloc(sizeof(point_t));
