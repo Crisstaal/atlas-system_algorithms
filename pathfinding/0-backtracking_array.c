@@ -113,37 +113,3 @@ queue_t *backtracking_array(char **map, int rows, int cols,
     queue_delete(path);
     return NULL;
 }
-
-/**
- * print_free_path - Unstacks the queue to discover the path from the starting
- * vertex to the target vertex. Also deallocates the queue.
- *
- * @path: Queue containing the path
- */
-static void print_free_path(queue_t *path)
-{
-    printf("Path found:\n");
-
-    // Reverse the path by using another queue to store the reversed path
-    queue_t *reversed_path = queue_create();
-    if (!reversed_path)
-        return;
-
-    // Reverse the path by dequeuing from the original queue and enqueuing into reversed path
-    while (path->front)
-    {
-        point_t *point = (point_t *)dequeue(path);
-        queue_push_back(reversed_path, point);
-    }
-
-    // Print the reversed path
-    while (reversed_path->front)
-    {
-        point_t *point = (point_t *)dequeue(reversed_path);
-        printf(" [%d, %d]\n", point->x, point->y);
-        free(point);
-    }
-
-    free(reversed_path);
-    free(path);
-}
