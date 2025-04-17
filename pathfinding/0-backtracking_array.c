@@ -1,134 +1,103 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "pathfinding.h"
 #include "queues.h"
 
 /**
- * is_valid_move - Check if the current position is valid to move
+ * backtracking_array - Searches for the first path from start to target
+ *                      using recursive backtracking in a 2D map.
  *
- * @map: Pointer to the 2D map
- * @rows: Number of rows in the map
- * @cols: Number of columns in the map
- * @x: Current x coordinate
- * @y: Current y coordinate
+ * @map: Pointer to the 2D array representing the map.
+ * @rows: The number of rows in the map.
+ * @cols: The number of columns in the map.
+ * @start: Coordinates of the starting point.
+ * @target: Coordinates of the target point.
  *
- * Return: 1 if valid, 0 if not valid
- */
-int is_valid_move(char **map, int rows, int cols, int x, int y)
-{
-	return (x >= 0 && x < rows && y >= 0 && y < cols && map[x][y] == '0');
-}
-
-/**
- * backtracking - Recursively find a path from start to target
- *
- * @map: Pointer to the 2D map
- * @rows: Number of rows in the map
- * @cols: Number of columns in the map
- * @start: Starting point
- * @target: Target point
- * @path: Queue to store the path
- * @visited: 2D array to keep track of visited positions
- *
- * Return: 1 if the path is found, 0 otherwise
- */
-int backtracking(char **map, int rows, int cols, point_t const *start,
-		 point_t const *target, queue_t *path, int **visited)
-{
-	int x = start->x;
-	int y = start->y;
-
-	/** Print current coordinates */
-	printf("Checking coordinates [%d, %d]\n", x, y);
-
-	/** Check if we've reached the target */
-	if (x == target->x && y == target->y)
-	{
-		point_t *point = malloc(sizeof(point_t));
-		if (!point)
-			return 0;
-		point->x = x;
-		point->y = y;
-		enqueue(path, point);
-		return 1;
-	}
-
-	/** If the current position is not valid or already visited */
-	if (!is_valid_move(map, rows, cols, x, y) || visited[x][y])
-		return 0;
-
-	/** Mark as visited */
-	visited[x][y] = 1;
-
-	/** Explore right, bottom, left, top */
-	if (backtracking(map, rows, cols, &(point_t){x, y + 1}, target, path, visited) ||
-	    backtracking(map, rows, cols, &(point_t){x + 1, y}, target, path, visited) ||
-	    backtracking(map, rows, cols, &(point_t){x, y - 1}, target, path, visited) ||
-	    backtracking(map, rows, cols, &(point_t){x - 1, y}, target, path, visited))
-	{
-		point_t *point = malloc(sizeof(point_t));
-		if (!point)
-			return 0;
-		point->x = x;
-		point->y = y;
-		enqueue(path, point);
-		return 1;
-	}
-
-	/** Backtrack if no path found */
-	return 0;
-}
-
-/**
- * backtracking_array - Find the first path from start to target using backtracking
- *
- * @map: Pointer to the 2D map
- * @rows: Number of rows in the map
- * @cols: Number of columns in the map
- * @start: Starting point
- * @target: Target point
- *
- * Return: Queue containing the path, or NULL if no path is found
+ * Return: A queue representing the path from start to target, or NULL if no
+ *         path is found.
  */
 queue_t *backtracking_array(char **map, int rows, int cols, point_t const *start, point_t const *target)
 {
-	queue_t *path = create_queue();
-	if (!path)
-		return NULL;
+    queue_t *path = queue_create();         /** Create a new queue to store the path */
+    int **visited = malloc(sizeof(int *) * rows); /** Allocate memory for the visited array */
+    int i, j;
 
-	/** Allocate memory for visited array */
-	int **visited = malloc(rows * sizeof(int *));
-	if (!visited)
-	{
-		free(path);
-		return NULL;
-	}
+    /** Initialize the visited array */
+    for (i = 0; i < rows; i++)
+    {
+        visited[i] = malloc(sizeof(int) * cols);  /** Allocate memory for each row */
+        for (j = 0; j < cols; j++)
+            visited[i][j] = 0;   /** Mark all cells as unvisited */
+    }
 
-	for (int i = 0; i < rows; i++)
-	{
-		visited[i] = calloc(cols, sizeof(int));
-		if (!visited[i])
-		{
-			for (int j = 0; j < i; j++)
-				free(visited[j]);
-			free(visited);
-			free(path);
-			return NULL;
-		}
-	}
+    /** Recursive function to perform the backtracking */
+    if (backtrack(map, rows, cols, start->x, start->y, target, visited, path))
+    {
+        for (i = 0; i < rows; i++)
+            free(visited[i]); /** Free each row of the visited array */
+        free(visited);        /** Free the visited array */
+        return path;          /** Return the found path */
+    }
 
-	/** Start backtracking from the start point */
-	if (!backtracking(map, rows, cols, start, target, path, visited))
-	{
-		free(visited);
-		free(path);
-		return NULL;
-	}
+    /** If no path is found, free the visited array and return NULL */
+    for (i = 0; i < rows; i++)
+        free(visited[i]);
+    free(visited);
+    queue_delete(path);  /** Deallocate the path queue */
+    return NULL;         /** Return NULL to indicate failure */
+}
 
-	/** Clean up visited array */
-	for (int i = 0; i < rows; i++)
-		free(visited[i]);
-	free(visited);
+/**
+ * backtrack - Recursive helper function to explore the map using backtracking
+ *             to find the path from start to target.
+ *
+ * @map: Pointer to the 2D array representing the map.
+ * @rows: The number of rows in the map.
+ * @cols: The number of columns in the map.
+ * @x: The current row coordinate.
+ * @y: The current column coordinate.
+ * @target: Coordinates of the target point.
+ * @visited: The 2D array to track visited points.
+ * @path: The queue to store the path.
+ *
+ * Return: 1 if the path is found, 0 if not.
+ */
+int backtrack(char **map, int rows, int cols, int x, int y, point_t const *target, int **visited, queue_t *path)
+{
+    /** Base case: If out of bounds or blocked or already visited */
+    if (x < 0 || y < 0 || x >= rows || y >= cols || map[x][y] == '1' || visited[x][y])
+        return 0;
 
-	return path;
+    /** Mark the current cell as visited */
+    visited[x][y] = 1;
+
+    /** Print the current coordinates for debugging */
+    printf("Checking coordinates [%d, %d]\n", x, y);
+
+    /** If the target is reached, add the point to the path and return true */
+    if (x == target->x && y == target->y)
+    {
+        point_t *point = malloc(sizeof(point_t));  /** Allocate memory for the point */
+        point->x = x;
+        point->y = y;
+        queue_push_back(path, point);   /** Push the point to the back of the queue */
+        return 1;
+    }
+
+    /** Explore neighbors in the order: right, down, left, up */
+    if (backtrack(map, rows, cols, x + 1, y, target, visited, path) ||  /** Right */
+        backtrack(map, rows, cols, x, y + 1, target, visited, path) ||  /** Down */
+        backtrack(map, rows, cols, x - 1, y, target, visited, path) ||  /** Left */
+        backtrack(map, rows, cols, x, y - 1, target, visited, path))    /** Up */
+    {
+        point_t *point = malloc(sizeof(point_t));  /** Allocate memory for the point */
+        point->x = x;
+        point->y = y;
+        queue_push_back(path, point);  /** Push the point to the back of the queue */
+        return 1;
+    }
+
+    /** If no valid move is found, unmark the current cell and return false */
+    visited[x][y] = 0;
+    return 0;
 }
