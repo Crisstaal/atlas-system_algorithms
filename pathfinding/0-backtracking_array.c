@@ -41,10 +41,11 @@ static int backtrack(char **map, int **visited, int rows, int cols,
 		return (1);
 	}
 
-	if (backtrack(map, visited, rows, cols, x + 1, y, target, path) ||
-	    backtrack(map, visited, rows, cols, x, y + 1, target, path) ||
-	    backtrack(map, visited, rows, cols, x - 1, y, target, path) ||
-	    backtrack(map, visited, rows, cols, x, y - 1, target, path))
+	/* Updated order: right, down, left, up */
+	if (backtrack(map, visited, rows, cols, x, y + 1, target, path) ||
+	    backtrack(map, visited, rows, cols, x + 1, y, target, path) ||
+	    backtrack(map, visited, rows, cols, x, y - 1, target, path) ||
+	    backtrack(map, visited, rows, cols, x - 1, y, target, path))
 	{
 		pt = malloc(sizeof(point_t));
 		if (!pt)
