@@ -42,9 +42,8 @@ static size_t traverse_helper(nary_tree_t const *node,
  *
  * Return: Maximum depth of the tree
  */
-size_t nary_tree_traverse(
-    nary_tree_t const *root,
-    void (*action)(nary_tree_t const *node, size_t depth))
+size_t nary_tree_traverse(nary_tree_t const *root,
+			  void (*action)(nary_tree_t const *node, size_t depth))
 {
 	if (!root)
 		return (0);
