@@ -43,7 +43,7 @@ static size_t dfs(nary_tree_t const *node, size_t *diameter)
 		child = child->next;
 	}
 
-	*diameter = max(*diameter, first_max + second_max);
+	*diameter = max(*diameter, first_max + second_max); // The correct calculation
 	height = 1 + first_max;
 	return (height);
 }
