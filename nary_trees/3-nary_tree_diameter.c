@@ -13,9 +13,9 @@ static size_t max(size_t a, size_t b)
 }
 
 /**
- * dfs - Helper to compute height and update diameter
+ * dfs - Depth-first search to compute height and diameter
  * @node: current node
- * @diameter: pointer to store max diameter
+ * @diameter: pointer to store the maximum diameter
  * Return: height of the node
  */
 static size_t dfs(nary_tree_t const *node, size_t *diameter)
@@ -43,15 +43,16 @@ static size_t dfs(nary_tree_t const *node, size_t *diameter)
 		child = child->next;
 	}
 
-	*diameter = max(*diameter, first_max + second_max); // The correct calculation
+	/* The diameter is the largest path between any two nodes */
+	*diameter = max(*diameter, first_max + second_max);
 	height = 1 + first_max;
-	return (height);
+	return height;
 }
 
 /**
  * nary_tree_diameter - Computes the diameter of an N-ary tree
  * @root: pointer to the root node
- * Return: the diameter
+ * Return: the diameter of the tree
  */
 size_t nary_tree_diameter(nary_tree_t const *root)
 {
@@ -61,5 +62,5 @@ size_t nary_tree_diameter(nary_tree_t const *root)
 		return (0);
 
 	dfs(root, &diameter);
-	return (diameter);
+	return diameter;
 }
