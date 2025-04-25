@@ -9,7 +9,7 @@
  */
 static size_t max(size_t a, size_t b)
 {
-	return (a > b ? a : b);
+    return (a > b ? a : b);
 }
 
 /**
@@ -21,37 +21,37 @@ static size_t max(size_t a, size_t b)
  */
 static size_t dfs(nary_tree_t const *node, size_t *diameter, size_t *max_height)
 {
-	size_t first_max = 0, second_max = 0, height = 0;
-	nary_tree_t *child = NULL;
-	size_t h;
+    size_t first_max = 0, second_max = 0, height = 0;
+    nary_tree_t *child = NULL;
+    size_t h;
 
-	if (!node)
-		return (0);
+    if (!node)
+        return (0);
 
-	child = node->children;
-	while (child)
-	{
-		h = dfs(child, diameter, max_height);
-		if (h > first_max)
-		{
-			second_max = first_max;
-			first_max = h;
-		}
-		else if (h > second_max)
-		{
-			second_max = h;
-		}
-		child = child->next;
-	}
+    child = node->children;
+    while (child)
+    {
+        h = dfs(child, diameter, max_height);
+        if (h > first_max)
+        {
+            second_max = first_max;
+            first_max = h;
+        }
+        else if (h > second_max)
+        {
+            second_max = h;
+        }
+        child = child->next;
+    }
 
-	// Update diameter as the sum of the two largest heights
-	*diameter = max(*diameter, first_max + second_max);
+    // Update diameter as the sum of the two largest heights
+    *diameter = max(*diameter, first_max + second_max);
+    
+    // Update max_height if the current height is greater
+    *max_height = max(*max_height, first_max);
 
-	// Update max_height if the current height is greater
-	*max_height = max(*max_height, first_max);
-
-	height = 1 + first_max;
-	return height;
+    height = 1 + first_max;
+    return height;
 }
 
 /**
@@ -61,13 +61,13 @@ static size_t dfs(nary_tree_t const *node, size_t *diameter, size_t *max_height)
  */
 size_t nary_tree_diameter(nary_tree_t const *root)
 {
-	size_t diameter = 0;
-	size_t max_height = 0;
+    size_t diameter = 1;
+    size_t max_height = 0;
 
-	if (!root)
-		return 0;
+    if (!root)
+        return 0;
 
-	dfs(root, &diameter, &max_height);
+    dfs(root, &diameter, &max_height);
 
-	return diameter;
+    return diameter;
 }
