@@ -22,7 +22,7 @@ typedef struct nary_tree_s
 } nary_tree_t;
 
 /* Function prototypes */
-nary_tree_t *nary_tree_insert(nary_tree_t *parent, char *content);
+nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *str);
 void nary_tree_delete(nary_tree_t *tree);
 size_t nary_tree_traverse(nary_tree_t const *root,
                           void (*action)(nary_tree_t const *node, size_t depth));
