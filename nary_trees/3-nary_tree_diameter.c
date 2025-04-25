@@ -61,7 +61,7 @@ static size_t dfs(nary_tree_t const *node, size_t *diameter, size_t *max_height)
  */
 size_t nary_tree_diameter(nary_tree_t const *root)
 {
-    size_t diameter = 0;
+    size_t diameter = 1;
     size_t max_height = 0;
 
     if (!root)
