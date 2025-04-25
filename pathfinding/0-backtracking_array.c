@@ -1,136 +1,124 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "pathfinding.h"
 #include "queues.h"
 
 /**
- * backtrack - Recursive backtracking function to find the path
+ * backtrack - Recursive helper to explore the maze
  *
- * @map: The grid map
- * @rows: Number of rows
- * @cols: Number of columns
- * @x: Current x-coordinate (column)
- * @y: Current y-coordinate (row)
- * @target: The target point
- * @visited: 2D array to mark visited cells
- * @path: Queue to store the path
+ * @map: 2D array of chars representing the maze
+ * @visited: 2D array to track visited cells
+ * @rows: number of rows in map
+ * @cols: number of columns in map
+ * @x: current x position
+ * @y: current y position
+ * @target: pointer to the target point
+ * @path: pointer to the path queue
  *
- * Return: 1 if the target is found, 0 otherwise
+ * Return: 1 if path to target is found, 0 otherwise
  */
-static int backtrack(char **map, int rows, int cols, int x, int y,
-                     point_t *target, int **visited, queue_t *path)
+static int backtrack(char **map, char **visited, int rows, int cols,
+		     int x, int y, const point_t *target, queue_t *path)
 {
-    /** Check for out-of-bound or blocked cells */
-    if (x < 0 || x >= cols || y < 0 || y >= rows || map[y][x] == '1' || visited[y][x])
-        return 0;
+	point_t *point;
 
-    /** Mark the current cell as visited */
-    visited[y][x] = 1;
+	/* Check bounds */
+	if (x < 0 || x >= cols || y < 0 || y >= rows)
+		return (0);
 
-    /** Print the current coordinates */
-    printf("Checking coordinates [%d, %d]\n", y, x);
+	/* Check if cell is blocked or already visited */
+	if (map[y][x] != '0' || visited[y][x])
+		return (0);
 
-    /** If target is found, add the point to the queue and return success */
-    if (x == target->x && y == target->y)
-    {
-        point_t *point = malloc(sizeof(point_t));
-        if (!point)
-            return 0;
-        point->x = x;
-        point->y = y;
-        queue_push_back(path, point);
-        return 1;
-    }
+	/* Print check */
+	printf("Checking coordinates [%d, %d]\n", x, y);
 
-    /** Try moving in the specified order: right, down, left, up */
-    if (backtrack(map, rows, cols, x + 1, y, target, visited, path) ||   // Right
-        backtrack(map, rows, cols, x, y + 1, target, visited, path) ||   // Bottom
-        backtrack(map, rows, cols, x - 1, y, target, visited, path) ||   // Left
-        backtrack(map, rows, cols, x, y - 1, target, visited, path))     // Top
-    {
-        point_t *point = malloc(sizeof(point_t));
-        if (!point)
-            return 0;
-        point->x = x;
-        point->y = y;
-        queue_push_back(path, point);
-        return 1;
-    }
+	/* Mark current cell as visited */
+	visited[y][x] = 1;
 
-    return 0;
+	/* Allocate and add point to path */
+	point = malloc(sizeof(point_t));
+	if (!point)
+		return (0);
+	point->x = x;
+	point->y = y;
+	enqueue(path, point);
+
+	/* Check if target reached */
+	if (x == target->x && y == target->y)
+		return (1);
+
+	/* Recurse in order: RIGHT, BOTTOM, LEFT, TOP */
+	if (backtrack(map, visited, rows, cols, x + 1, y, target, path) ||
+	    backtrack(map, visited, rows, cols, x, y + 1, target, path) ||
+	    backtrack(map, visited, rows, cols, x - 1, y, target, path) ||
+	    backtrack(map, visited, rows, cols, x, y - 1, target, path))
+		return (1);
+
+	/* Backtrack: remove current point from path */
+	free(dequeue(path));
+	return (0);
 }
 
 /**
- * backtracking_array - Finds the first path from start to target using backtracking
+ * backtracking_array - Finds a path from start to target using backtracking
  *
- * @map: The grid map
- * @rows: Number of rows in the grid
- * @cols: Number of columns in the grid
- * @start: Starting point
- * @target: Target point
+ * @map: 2D array of chars representing the maze
+ * @rows: number of rows
+ * @cols: number of columns
+ * @start: pointer to the starting point
+ * @target: pointer to the target point
  *
- * Return: A queue containing the path from start to target, or NULL if no path
+ * Return: queue_t containing path from start to target or NULL on failure
  */
 queue_t *backtracking_array(char **map, int rows, int cols,
-                            point_t const *start, point_t const *target)
+			    point_t const *start, point_t const *target)
 {
-    queue_t *path = queue_create();
-    if (!path)
-        return NULL;
+	char **visited;
+	queue_t *path;
+	int i;
 
-    int **visited = malloc(rows * sizeof(int *));
-    if (!visited)
-    {
-        queue_delete(path);
-        return NULL;
-    }
+	if (!map || !start || !target)
+		return (NULL);
 
-    for (int i = 0; i < rows; i++)
-    {
-        visited[i] = calloc(cols, sizeof(int));
-        if (!visited[i])
-        {
-            for (int j = 0; j < i; j++)
-                free(visited[j]);
-            free(visited);
-            queue_delete(path);
-            return NULL;
-        }
-    }
+	/* Allocate visited matrix */
+	visited = malloc(sizeof(char *) * rows);
+	if (!visited)
+		return (NULL);
+	for (i = 0; i < rows; i++)
+	{
+		visited[i] = calloc(cols, sizeof(char));
+		if (!visited[i])
+		{
+			while (i--)
+				free(visited[i]);
+			free(visited);
+			return (NULL);
+		}
+	}
 
-    /** Start the backtracking */
-    if (backtrack(map, rows, cols, start->x, start->y, (point_t *)target, visited, path))
-    {
-        /** Path is found; reverse the path to correct the order */
-        queue_t *reversed_path = queue_create();
-        if (!reversed_path)
-        {
-            for (int i = 0; i < rows; i++)
-                free(visited[i]);
-            free(visited);
-            queue_delete(path);
-            return NULL;
-        }
+	/* Create path queue */
+	path = queue_create();
+	if (!path)
+	{
+		for (i = 0; i < rows; i++)
+			free(visited[i]);
+		free(visited);
+		return (NULL);
+	}
 
-        while (path->front)
-        {
-            point_t *point = dequeue(path);
-            queue_push_front(reversed_path, point);
-        }
+	/* Start recursive backtracking */
+	if (!backtrack(map, visited, rows, cols, start->x, start->y, target, path))
+	{
+		/* No path found, cleanup */
+		queue_delete(path);
+		path = NULL;
+	}
 
-        for (int i = 0; i < rows; i++)
-            free(visited[i]);
-        free(visited);
-        queue_delete(path);
+	/* Cleanup visited matrix */
+	for (i = 0; i < rows; i++)
+		free(visited[i]);
+	free(visited);
 
-        return reversed_path; 
-    }
-
-    /** Cleanup if no path is found */
-    for (int i = 0; i < rows; i++)
-        free(visited[i]);
-    free(visited);
-    queue_delete(path);
-    return NULL;
+	return (path);
 }
