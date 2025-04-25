@@ -42,7 +42,7 @@ static int backtrack(char **map, char **visited, int rows, int cols,
 		return (0);
 	point->x = x;
 	point->y = y;
-	enqueue(path, point);
+	queue_push_back(path, point);
 
 	/* Check if target reached */
 	if (x == target->x && y == target->y)
